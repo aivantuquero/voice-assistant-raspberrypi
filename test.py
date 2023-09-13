@@ -1,3 +1,6 @@
+from textblob import TextBlob
+
+
 text = "small letter"
 
 text = text.upper()
@@ -5,25 +8,25 @@ text = text.upper()
 print(text)
 
 
-# # Define your message
-# message = "My doggy is super smart. He knows how to sit, stay, and shake. I love him so much"
+# Define your message
+message = "My doggy is super smart. He knows how to sit, stay, and shake. I love him so much"
 
-# # Create a TextBlob object
-# blob = TextBlob(message)
+# Create a TextBlob object
+blob = TextBlob(message)
 
-# # Analyze sentiment
-# sentiment_score = blob.sentiment.polarity
+# Analyze sentiment
+sentiment_score = blob.sentiment.polarity
 
-# # Categorize the sentiment based on the polarity score
-# if sentiment_score > 0.2:
-#     tone = "happy"
-# elif sentiment_score < -0.2:
-#     tone = "sad"
-# else:
-#     tone = "neutral or other"
+# Categorize the sentiment based on the polarity score
+if sentiment_score > 0.2:
+    tone = "happy"
+elif sentiment_score < -0.2:
+    tone = "sad"
+else:
+    tone = "neutral or other"
 
-# # Print the result
-# print(f"The tone of the message is {tone}")
+# Print the result
+print(f"The tone of the message is {tone}")
 
 
 

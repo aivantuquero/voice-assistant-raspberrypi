@@ -5,6 +5,23 @@ import speech_recognition as sr
 import pyttsx3
 import numpy as np
 import pandas as pd
+from textblob import TextBlob
+import calibration_test
+import face_detection
+import play_emotion as emotions
+from textblob import TextBlob
+from multiprocessing import Process, Queue
+
+calibration_test.calibrate()
+
+detection_queue = Queue()
+emotion_queue = Queue()
+
+process_display_emotion = Process(target=emotions.display_emotion, args=(emotion_queue,))
+process_face_detection = Process(target=face_detection.start, args=(detection_queue,))
+
+process_display_emotion.start()
+process_face_detection.start()
 
 
 load_dotenv()
@@ -33,6 +50,29 @@ greetings = [f"Howdy, partner! What can I do for you today?",
              f"Hi, why are you so good looking? What can I help you?" ]
 
 
+def kill_process():
+    emotion_queue.put("stop")
+    detection_queue.put("stop")
+        
+    process_display_emotion.join()
+    process_face_detection.join()
+
+
+def showEmotion(text):
+    # sentiment analysis
+    blob = TextBlob(text)
+
+    # Analyze sentiment
+    sentiment_score = blob.sentiment.polarity
+
+    # Categorize the sentiment based on the polarity score
+    if sentiment_score > 0.2:
+        emotion_queue.put("happy")
+    elif sentiment_score < -0.2:
+        emotion_queue.put("sad")
+    else:
+        emotion_queue.put("talking")
+        
 
 # Listen for the wake word "hey pos"
 def listen_for_wake_word(source):
@@ -43,9 +83,15 @@ def listen_for_wake_word(source):
         try:
             
             text = r.recognize_whisper_api(audio, api_key=openai_secret_key)
+
+            
+            
+            
+
             if "tbm" in text.lower():
                 print("Wake word detected.")
                 engine.say(np.random.choice(greetings))
+                showEmotion(text)
                 engine.runAndWait()
                 listen_and_respond(source)
                 break
@@ -118,8 +164,9 @@ def listen_and_respond(source):
 
             # Send input to OpenAI API
             response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{text}"}])
+            
             response_text = response.choices[0].message.content
-            print(response_text)
+            showEmotion(response_text)
     
             print("Listening...")
 
