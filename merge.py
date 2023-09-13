@@ -85,9 +85,6 @@ def listen_for_wake_word(source):
             text = r.recognize_whisper_api(audio, api_key=openai_secret_key)
 
             
-            
-            
-
             if "tbm" in text.lower():
                 print("Wake word detected.")
                 engine.say(np.random.choice(greetings))
