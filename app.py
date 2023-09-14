@@ -63,17 +63,53 @@ def product_price(source):
     print(f"You said: {productName}")
 
     # Load the Excel file into a pandas DataFrame
-    
+    productName = productName.lower()
 
-    if "-" in productName:
-        productName = productName.replace("-", "")
+
 
     if "yx" in productName:
         productName = productName.replace("yx", "YONEX")
 
+    if "your next" in productName:
+        productName = productName.replace("your next", "YONEX")
+
+
     if "you're next" in productName:
         productName = productName.replace("you're next", "YONEX")
 
+    if "apox" in productName:
+        productName = productName.replace("apox", "APACS")
+    if "apox" in productName:
+        productName = productName.replace("apox", "APACS")
+
+    if "apocs" in productName:
+        productName = productName.replace("apocs", "APACS")
+
+    if "apex" in productName:
+        productName = productName.replace("apex", "APACS")
+
+    if "sunbata" in productName:
+        productName = productName.replace("sunbata", "sunbatta")
+    if "sumbata" in productName:
+        productName = productName.replace("sumbata", "sunbatta")
+
+    if "sanbata" in productName:
+        productName = productName.replace("sanbata", "sunbatta")
+
+    if "sambata" in productName:
+        productName = productName.replace("sambata", "sunbatta")
+
+    if "sombata" in productName:
+        productName = productName.replace("sombata", "sunbatta")
+
+    if "sucks" in productName:
+        productName = productName.replace("sucks", "socks")
+
+    if "rocket" in productName:
+        productName = productName.replace("rocket", "racket")
+
+    if "-" in productName:
+        productName = productName.replace("-", "")
 
     # Search for the product in the DataFrame
     product = df[df['ProductName'] == productName.upper()]
