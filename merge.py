@@ -198,6 +198,12 @@ def listen_and_respond(source):
                 product_price(source)
                 continue
 
+            if "shutdown" in text.lower() or "shut down" in text.lower() or "power off" in text.lower():
+                engine.say("okay, shutting down")
+                engine.runAndWait()
+                kill_process()
+                break
+
 
 
             prefix = "Respond short and cute. Use short sentences. "
