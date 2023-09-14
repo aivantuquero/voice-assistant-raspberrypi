@@ -11,6 +11,7 @@ import face_detection
 import play_emotion as emotions
 from textblob import TextBlob
 from multiprocessing import Process, Queue
+import hands_movements as hands
 
 calibration_test.calibrate()
 
@@ -65,11 +66,17 @@ def showEmotion(text):
     # Analyze sentiment
     sentiment_score = blob.sentiment.polarity
 
+
     # Categorize the sentiment based on the polarity score
-    if sentiment_score > 0.2:
+    if sentiment_score > 0.4:
         emotion_queue.put("happy")
-    elif sentiment_score < -0.2:
+    elif sentiment_score > 0.2:
+        emotion_queue.put("inlove")
+    elif sentiment_score < -0.4:
         emotion_queue.put("sad")
+
+    elif sentiment_score < -0.2:
+        emotion_queue.put("angry")
     else:
         emotion_queue.put("talking")
         
@@ -87,6 +94,9 @@ def listen_for_wake_word(source):
             
             if "tbm" in text.lower():
                 print("Wake word detected.")
+
+                hands.say_hi()
+
                 engine.say(np.random.choice(greetings))
                 showEmotion(text)
                 engine.runAndWait()
@@ -106,17 +116,53 @@ def product_price(source):
     print(f"You said: {productName}")
 
     # Load the Excel file into a pandas DataFrame
-    
+    productName = productName.lower()
 
-    if "-" in productName:
-        productName = productName.replace("-", "")
+
 
     if "yx" in productName:
         productName = productName.replace("yx", "YONEX")
 
+    if "your next" in productName:
+        productName = productName.replace("your next", "YONEX")
+
+
     if "you're next" in productName:
         productName = productName.replace("you're next", "YONEX")
 
+    if "apox" in productName:
+        productName = productName.replace("apox", "APACS")
+    if "apox" in productName:
+        productName = productName.replace("apox", "APACS")
+
+    if "apocs" in productName:
+        productName = productName.replace("apocs", "APACS")
+
+    if "apex" in productName:
+        productName = productName.replace("apex", "APACS")
+
+    if "sunbata" in productName:
+        productName = productName.replace("sunbata", "sunbatta")
+    if "sumbata" in productName:
+        productName = productName.replace("sumbata", "sunbatta")
+
+    if "sanbata" in productName:
+        productName = productName.replace("sanbata", "sunbatta")
+
+    if "sambata" in productName:
+        productName = productName.replace("sambata", "sunbatta")
+
+    if "sombata" in productName:
+        productName = productName.replace("sombata", "sunbatta")
+
+    if "sucks" in productName:
+        productName = productName.replace("sucks", "socks")
+
+    if "rocket" in productName:
+        productName = productName.replace("rocket", "racket")
+
+    if "-" in productName:
+        productName = productName.replace("-", "")
 
     # Search for the product in the DataFrame
     product = df[df['ProductName'] == productName.upper()]
